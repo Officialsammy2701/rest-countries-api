@@ -93,13 +93,13 @@ In future projects, I want to focus on:
 - REST Countries API documentation 
 - [CSS Grid and Flexbox documentation on MDN](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout)
 
-### Author
+## Author
 
 - Website - [Ismail Akande](https://github.com/Officialsammy2701)
 - Frontend Mentor - [@Officialsammy2701](https://www.frontendmentor.io/profile/Officialsammy2701)
 - Twitter - [@sammy_2701](https://x.com/sammy_2701)
 
-### Acknowledgments
+## Acknowledgments
 
 This project was built as part of my frontend development practice.
 Special thanks to Frontend Mentor for providing high-quality, real-world challenges.

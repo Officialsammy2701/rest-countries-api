@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-  `;const v=document.getElementById("backBtn");v&&v.addEventListener("click",a),e.querySelectorAll(".border-pill").forEach(r=>{r.addEventListener("click",()=>{const h=n.find(x=>x.alpha3Code===r.dataset.code);h&&i(h)})})}let b=[],c=M(),E="",f="";B(c);fetch("./data.json").then(e=>{if(!e.ok)throw new Error("Failed to load country data");return e.json()}).then(e=>{b=e,D()}).catch(e=>{document.getElementById("root").innerHTML=`
+  `;const v=document.getElementById("backBtn");v&&v.addEventListener("click",a),e.querySelectorAll(".border-pill").forEach(r=>{r.addEventListener("click",()=>{const h=n.find(x=>x.alpha3Code===r.dataset.code);h&&i(h)})})}let b=[],c=M(),E="",f="";B(c);fetch("/rest-countries-api/data.json").then(e=>{if(!e.ok)throw new Error("Failed to load country data");return e.json()}).then(e=>{b=e,D()}).catch(e=>{document.getElementById("root").innerHTML=`
       <p style="padding:40px;color:red;">Failed to load country data: ${e.message}</p>
     `});function D(){H(),F(),$()}function H(){document.getElementById("root").innerHTML=`
     <header class="header">

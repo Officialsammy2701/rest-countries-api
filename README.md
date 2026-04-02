@@ -74,7 +74,7 @@ export function getCountriesByName(countries, query) {
 I also improved my understanding of:
 
 - Managing UI state (search + region filter together)
-- Building a custom dropdown instead of relying on <select>
+- Building a custom dropdown instead of relying on <select>.
 - Handling theme switching using localStorage
 - Structuring CSS into global styles and page-specific styles
 - Matching designs pixel-perfectly across desktop and mobile (especially 375px)
@@ -102,4 +102,4 @@ In future projects, I want to focus on:
 ### Acknowledgments
 
 This project was built as part of my frontend development practice.
-Special thanks to Frontend Mentor for providing high-quality real-world challenges.
+Special thanks to Frontend Mentor for providing high-quality, real-world challenges.

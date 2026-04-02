@@ -47,7 +47,7 @@ Users should be able to:
 - CSS custom properties (variables)
 - Flexbox
 - CSS Grid
-- Vanilla Javascript (modular structure)
+- Vanilla JavaScript (modular structure)
 - Mobile-first workflow
 - REST Countries dataset (data.json)
 
@@ -57,7 +57,7 @@ This project helped me improve my understanding of structuring a real-world fron
 
 One key thing I learned was how to separate logic into reusable modules instead of writing everything in one file. For example:
 
-```js
+``` js
 export function getCountriesByName(countries, query) {
   if (!query || !query.trim()) return countries;
 

@@ -47,7 +47,7 @@ Users should be able to:
 - CSS custom properties (variables)
 - Flexbox
 - CSS Grid
-- Vanilla Javascript (modular structure)
+- Vanilla JavaScript (modular structure)
 - Mobile-first workflow
 - REST Countries dataset (data.json)
 
@@ -57,7 +57,7 @@ This project helped me improve my understanding of structuring a real-world fron
 
 One key thing I learned was how to separate logic into reusable modules instead of writing everything in one file. For example:
 
-```js
+``` js
 export function getCountriesByName(countries, query) {
   if (!query || !query.trim()) return countries;
 
@@ -93,13 +93,13 @@ In future projects, I want to focus on:
 - REST Countries API documentation 
 - [CSS Grid and Flexbox documentation on MDN](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout)
 
-## Author
+### Author
 
 - Website - [Ismail Akande](https://github.com/Officialsammy2701)
 - Frontend Mentor - [@Officialsammy2701](https://www.frontendmentor.io/profile/Officialsammy2701)
 - Twitter - [@sammy_2701](https://x.com/sammy_2701)
 
-## Acknowledgments
+### Acknowledgments
 
 This project was built as part of my frontend development practice.
 Special thanks to Frontend Mentor for providing high-quality real-world challenges.

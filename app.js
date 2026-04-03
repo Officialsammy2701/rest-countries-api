@@ -60,7 +60,7 @@ function renderShell() {
   document.getElementById("root").innerHTML = `
     <header class="header">
       <div class="header__inner">
-        <span class="header__logo">Where in the world?</span>
+        <h1 class="header__logo">Where in the world?</h1>
         <button class="theme-toggle" id="themeBtn" aria-label="Toggle dark mode">
           ${getThemeIcon(currentTheme)}
           <span id="themeLabel">${currentTheme === "dark" ? "Dark Mode" : "Light Mode"}</span>
@@ -130,6 +130,7 @@ function renderHomePage() {
           type="button"
           aria-haspopup="listbox"
           aria-expanded="false"
+          aria-controls="filterDropdown"
         >
           <span id="filterLabel">${selectedRegion || "Filter by Region"}</span>
 
@@ -153,21 +154,21 @@ function renderHomePage() {
           </svg>
         </button>
 
-        <ul class="filter-dropdown" id="filterDropdown" role="listbox">
+        <ul class="filter-dropdown" id="filterDropdown" role="listbox" aria-labelledby="filterLabel">
           <li
             class="filter-option filter-reset-option"
-            data-region=""
-            role="option"
-            tabindex="0"
             id="resetFilterOption"
+            role="option"
+            data-region=""
+            tabindex="0"
           >
             Clear Filter
           </li>
-          <li class="filter-option" data-region="Africa" role="option" tabindex="0">Africa</li>
-          <li class="filter-option" data-region="Americas" role="option" tabindex="0">America</li>
-          <li class="filter-option" data-region="Asia" role="option" tabindex="0">Asia</li>
-          <li class="filter-option" data-region="Europe" role="option" tabindex="0">Europe</li>
-          <li class="filter-option" data-region="Oceania" role="option" tabindex="0">Oceania</li>
+          <li class="filter-option" data-region="Africa" role="option" tabindex="0"  aria-selected="false">Africa</li>
+          <li class="filter-option" data-region="Americas" role="option" tabindex="0"  aria-selected="false">America</li>
+          <li class="filter-option" data-region="Asia" role="option" tabindex="0"  aria-selected="false">Asia</li>
+          <li class="filter-option" data-region="Europe" role="option" tabindex="0"  aria-selected="false">Europe</li>
+          <li class="filter-option" data-region="Oceania" role="option" tabindex="0"  aria-selected="false">Oceania</li>
         </ul>
       </div>
     </div>
@@ -201,6 +202,13 @@ function bindHomeControls() {
   const filterLabel = document.getElementById("filterLabel");
   const resetFilterOption = document.getElementById("resetFilterOption");
   const filterOptions = filterDropdown.querySelectorAll(".filter-option");
+
+  function updateOptionSelection() {
+    filterOptions.forEach((option) => {
+      const isSelected = option.dataset.region === selectedRegion;
+      option.setAttribute("aria-selected", isSelected ? "true" : "false");
+    });
+  }
 
   function updateResetOptionVisibility() {
     if (!resetFilterOption) return;
@@ -245,6 +253,7 @@ function bindHomeControls() {
       selectedRegion = option.dataset.region;
       updateFilterLabel();
       updateResetOptionVisibility();
+      updateOptionSelection();
       closeDropdown();
       renderGrid();
     };
@@ -315,9 +324,9 @@ function renderGrid() {
 }
 
 function buildCard(c) {
-  const flagSrc = c.flags?.svg || c.flags?.png || c.flag || '';
+  const flagSrc = c.flags?.svg || c.flags?.png || c.flag || "";
   return `
-    <article
+    <button
       class="card"
       tabindex="0"
       role="button"
@@ -330,7 +339,7 @@ function buildCard(c) {
           src="${flagSrc}"
           alt="Flag of ${escapeAttr(c.name)}"
           loading="lazy"
-          onerror="this.onerror=null; this.src='${c.flags?.svg || c.flag || ''}'"
+          onerror="this.onerror=null; this.src='${c.flags?.svg || c.flag || ""}'"
         />
       </div>
 
@@ -342,7 +351,7 @@ function buildCard(c) {
           <p><span>Capital: </span><span class="val">${escapeHTML(c.capital || "N/A")}</span></p>
         </div>
       </div>
-    </article>
+    </button>
   `;
 }
 

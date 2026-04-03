@@ -91,6 +91,13 @@ a {
   color: inherit;
 }
 
+.card {
+  border: none;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+}
+
 
 /* =============================================
    HEADER / NAV

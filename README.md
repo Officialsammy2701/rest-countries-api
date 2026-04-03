@@ -54,7 +54,6 @@ Users should be able to:
 ### What I learned
 
 This project helped me improve my understanding of structuring a real-world frontend application without using a framework.
-
 One key thing I learned was how to separate logic into reusable modules instead of writing everything in one file. For example:
 
 ``` js
@@ -71,6 +70,7 @@ export function getCountriesByName(countries, query) {
   });
 }
 ```
+
 I also improved my understanding of:
 
 - Managing UI state (search + region filter together)

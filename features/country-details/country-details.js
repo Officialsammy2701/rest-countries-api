@@ -3,33 +3,62 @@
  * Renders the country detail page into a given container element.
  */
 
-const fmt = (n) => (n ? n.toLocaleString() : 'N/A');
+const fmt = (n) => (n ? n.toLocaleString() : "N/A");
 
 function escapeHTML(str) {
-  return String(str || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+  return String(str || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
-function formatCurrencies(currencies = []) {
-  return currencies.map((currency) => currency.name || currency.code).join(', ') || 'N/A';
+function normalizeToArray(value) {
+  if (Array.isArray(value)) return value;
+  if (value && typeof value === "object") return Object.values(value);
+  return [];
 }
 
-function formatLanguages(languages = []) {
-  return languages.map((language) => language.name).join(', ') || 'N/A';
+function formatCurrencies(currencies) {
+  const list = normalizeToArray(currencies);
+  return (
+    list
+      .map((currency) => currency?.name || currency?.code || "")
+      .filter(Boolean)
+      .join(", ") || "N/A"
+  );
 }
 
-export function renderDetailPage(container, country, allCountries, { onBack, onSelectCountry }) {
+function formatLanguages(languages) {
+  const list = normalizeToArray(languages);
+  return (
+    list
+      .map((language) => language?.name || language)
+      .filter(Boolean)
+      .join(", ") || "N/A"
+  );
+}
+export function renderDetailPage(
+  container,
+  country,
+  allCountries,
+  { onBack, onSelectCountry },
+) {
   const borderCountries = (country.borders || []).map((code) => {
-    return allCountries.find((c) => c.alpha3Code === code) || { name: code, alpha3Code: code };
+    return (
+      allCountries.find((c) => c.alpha3Code === code) || {
+        name: code,
+        alpha3Code: code,
+      }
+    );
   });
 
-  const tld = (country.topLevelDomain || []).filter(Boolean).join(', ') || 'N/A';
+  const tld =
+    (country.topLevelDomain || []).filter(Boolean).join(", ") || "N/A";
   const currencies = formatCurrencies(country.currencies);
   const languages = formatLanguages(country.languages);
-  const flagSrc = country.flags?.svg || country.flags?.png || country.flag || '';
+  const flagSrc =
+    country.flags?.svg || country.flags?.png || country.flag || "";
 
   const bordersHTML = borderCountries.length
     ? `
@@ -39,9 +68,9 @@ export function renderDetailPage(container, country, allCountries, { onBack, onS
           ${borderCountries
             .map(
               (bc) =>
-                `<button class="border-pill" data-code="${bc.alpha3Code}">${escapeHTML(bc.name)}</button>`
+                `<button class="border-pill" data-code="${bc.alpha3Code}">${escapeHTML(bc.name)}</button>`,
             )
-            .join('')}
+            .join("")}
         </div>
       </div>
     `
@@ -74,11 +103,11 @@ export function renderDetailPage(container, country, allCountries, { onBack, onS
 
           <div class="detail-facts">
             <div>
-              <p class="detail-fact"><strong>Native Name: </strong><span>${escapeHTML(country.nativeName || country.name || 'N/A')}</span></p>
+              <p class="detail-fact"><strong>Native Name: </strong><span>${escapeHTML(country.nativeName || country.name || "N/A")}</span></p>
               <p class="detail-fact"><strong>Population: </strong><span>${fmt(country.population)}</span></p>
-              <p class="detail-fact"><strong>Region: </strong><span>${escapeHTML(country.region || 'N/A')}</span></p>
-              <p class="detail-fact"><strong>Sub Region: </strong><span>${escapeHTML(country.subregion || 'N/A')}</span></p>
-              <p class="detail-fact"><strong>Capital: </strong><span>${escapeHTML(country.capital || 'N/A')}</span></p>
+              <p class="detail-fact"><strong>Region: </strong><span>${escapeHTML(country.region || "N/A")}</span></p>
+              <p class="detail-fact"><strong>Sub Region: </strong><span>${escapeHTML(country.subregion || "N/A")}</span></p>
+              <p class="detail-fact"><strong>Capital: </strong><span>${escapeHTML(country.capital || "N/A")}</span></p>
             </div>
 
             <div>
@@ -94,13 +123,13 @@ export function renderDetailPage(container, country, allCountries, { onBack, onS
     </div>
   `;
 
-  const backBtn = document.getElementById('backBtn');
+  const backBtn = document.getElementById("backBtn");
   if (backBtn) {
-    backBtn.addEventListener('click', onBack);
+    backBtn.addEventListener("click", onBack);
   }
 
-  container.querySelectorAll('.border-pill').forEach((btn) => {
-    btn.addEventListener('click', () => {
+  container.querySelectorAll(".border-pill").forEach((btn) => {
+    btn.addEventListener("click", () => {
       const found = allCountries.find((c) => c.alpha3Code === btn.dataset.code);
       if (found) onSelectCountry(found);
     });

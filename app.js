@@ -36,7 +36,9 @@ fetch(`${import.meta.env.BASE_URL}data.json`)
   })
   .then((data) => {
     allCountries = data;
-    init();
+    renderShell();
+    bindHeader();
+    handleRoute();
   })
   .catch((err) => {
     document.getElementById("root").innerHTML = `
@@ -45,13 +47,27 @@ fetch(`${import.meta.env.BASE_URL}data.json`)
   });
 
 /* --------------------------------------------------
-   Init
+   Route Handling
 -------------------------------------------------- */
-function init() {
-  renderShell();
-  bindHeader();
+
+function handleRoute() {
+  const hash = window.location.hash.replace(/^#/, "");
+
+  if (hash.startsWith("country/")) {
+    const code = decodeURIComponent(hash.split("/")[1] || "");
+    const country = allCountries.find((c) => c.alpha3Code === code);
+
+    if (country) {
+      showDetail(country);
+      return;
+    }
+  }
+
+  destroyDetailPage();
   renderHomePage();
 }
+
+window.addEventListener("hashchange", handleRoute);
 
 /* --------------------------------------------------
    Shell (header + content wrapper)
@@ -306,18 +322,13 @@ function renderGrid() {
   gridEl.innerHTML = list.map((c) => buildCard(c)).join("");
 
   gridEl.querySelectorAll(".card").forEach((card) => {
-    const handler = () => {
+    card.addEventListener("click", (e) => {
+      e.preventDefault();
       const country = allCountries.find(
         (c) => c.alpha3Code === card.dataset.code,
       );
-      showDetail(country);
-    };
-
-    card.addEventListener("click", handler);
-    card.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handler();
+      if (country) {
+        window.location.hash = `country/${country.alpha3Code}`;
       }
     });
   });
@@ -325,12 +336,13 @@ function renderGrid() {
 
 function buildCard(c) {
   const flagSrc = c.flags?.svg || c.flags?.png || c.flag || "";
+  const countryCode = c.alpha3Code || "";
+
   return `
-    <button
+    <a
       class="card"
-      tabindex="0"
-      role="button"
-      data-code="${c.alpha3Code}"
+      href="#country/${encodeURIComponent(countryCode)}"
+      data-code="${countryCode}"
       aria-label="View details for ${escapeAttr(c.name)}"
     >
       <div class="card__flag-wrap">
@@ -351,7 +363,7 @@ function buildCard(c) {
           <p><span>Capital: </span><span class="val">${escapeHTML(c.capital || "N/A")}</span></p>
         </div>
       </div>
-    </button>
+    </a>
   `;
 }
 
@@ -379,17 +391,26 @@ function buildSkeletons(n) {
 function showDetail(country) {
   if (!country) return;
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  window.scrollTo({
+    top: 0,
+    behavior: prefersReducedMotion ? "auto" : "smooth",
+  });
 
   const content = document.getElementById("content");
 
   renderDetailPage(content, country, allCountries, {
     onBack: () => {
-      destroyDetailPage();
-      renderHomePage();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.location.hash = "";
     },
-    onSelectCountry: (c) => showDetail(c),
+    onSelectCountry: (c) => {
+      if (c?.alpha3Code) {
+        window.location.hash = `country/${c.alpha3Code}`;
+      }
+    },
   });
 }
 
@@ -409,5 +430,9 @@ function escapeHTML(str) {
 }
 
 function escapeAttr(str) {
-  return String(str || "").replace(/"/g, "&quot;");
+  return String(str || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
